@@ -1,6 +1,6 @@
 #src is:https://github.com/akshaybahadur21/Drowsiness_Detection
 #which is based on https://www.pyimagesearch.com/2017/05/08/drowsiness-detection-opencv/
-from scipy.spatial import distance
+import numpy as np
 from imutils import face_utils
 import imutils
 import time
@@ -8,20 +8,20 @@ import dlib
 import cv2
 
 def eye_aspect_ratio(eye):
-	A = distance.euclidean(eye[1], eye[5])
-	B = distance.euclidean(eye[2], eye[4])
-	C = distance.euclidean(eye[0], eye[3])
+	A = np.linalg.norm(eye[1]-eye[5])
+	B = np.linalg.norm(eye[2]-eye[4])
+	C = np.linalg.norm(eye[0]-eye[3])
 	ear = (A + B) / (2.0 * C)
 	return ear
 	
-thresh = 0.30
-frame_check = 30
+thresh = 0.25
+frame_check = 20
 detect = dlib.get_frontal_face_detector()
 predict = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")# Dat file is the crux of the code
 
 (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_68_IDXS["left_eye"]
 (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_68_IDXS["right_eye"]
-cap=cv2.VideoCapture(0)#"../../data/noglasses.mp4")
+cap=cv2.VideoCapture(0) #"../data/glasses.mp4")
 flag=0
 eye_flag=0
 last_eyes=time.time()
