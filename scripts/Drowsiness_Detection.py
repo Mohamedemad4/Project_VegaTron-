@@ -1,11 +1,13 @@
 #src is:https://github.com/akshaybahadur21/Drowsiness_Detection
 #which is based on https://www.pyimagesearch.com/2017/05/08/drowsiness-detection-opencv/
+import cv2
+import dlib
+import time
+import imutils
+import threading
 import numpy as np
 from imutils import face_utils
-import imutils
-import time
-import dlib
-import cv2
+from flask import Flask, render_template, Response
 
 def eye_aspect_ratio(eye):
 	A = np.linalg.norm(eye[1]-eye[5])
@@ -26,15 +28,18 @@ flag=0
 eye_flag=0
 last_eyes=time.time()
 seconds_with_no_eyes=2.5
+
 while True:
 	ret, frame=cap.read()
 	if not ret:
+		print("failed to read cap")
 		continue
 	frame = imutils.resize(frame, width=450)
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	subjects = detect(gray, 0)
 	if not subjects:
 		if (time.time()-last_eyes)>seconds_with_no_eyes:
+			print("Show me those eyes")
 			cv2.putText(frame, "********Show Me those Eyes********", (10, 30),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
 			cv2.putText(frame, "****************ALERT!****************", (10,325),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0,0), 2)
 	else:  
@@ -57,16 +62,11 @@ while True:
 			flag += 1
 			print(flag)
 			if flag >= frame_check:
+				print("Alert")
 				cv2.putText(frame, "****************ALERT!****************", (10, 30),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 				cv2.putText(frame, "****************ALERT!****************", (10,325),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-				#print ("Drowsy")
 		else:
 			flag = 0
-	cv2.imshow("Frame", frame)
-	key = cv2.waitKey(1) & 0xFF
-	if key == ord("q"):
-		break
-cv2.destroyAllWindows()
 cap.stop()

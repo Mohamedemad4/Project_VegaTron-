@@ -44,5 +44,6 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
+    print("starting Standalone LiveStream")
     camera = cv2.VideoCapture(0)
     app.run(host='0.0.0.0', threaded=True)
