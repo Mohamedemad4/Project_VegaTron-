@@ -7,6 +7,7 @@ import imutils
 import threading
 import numpy as np
 from imutils import face_utils
+from blink import  blue1,blue0,buzz1,buzz0,red1,red0
 
 def eye_aspect_ratio(eye):
 	A = np.linalg.norm(eye[1]-eye[5])
@@ -27,7 +28,7 @@ predict = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")# Dat fil
 cap=cv2.VideoCapture(0) #"../data/glasses.mp4")
 
 last_eyes=time.time()
-last_ear_critical=time.time()
+last_ear_uncritical=time.time()
 
 while True:
 	ret, frame=cap.read()
@@ -40,9 +41,13 @@ while True:
 	if not subjects:
 		if (time.time()-last_eyes)>seconds_with_no_eyes:
 			print("Show me those eyes")
+			blue1()
+			buzz1()
 			cv2.putText(frame, "********Show Me those Eyes********", (10, 30),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
 			cv2.putText(frame, "****************ALERT!****************", (10,325),cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0,0), 2)
 	else:  
+		blue0()
+		buzz0()
 		last_eyes=time.time()
               
 	for subject in subjects:
@@ -59,12 +64,16 @@ while True:
 		cv2.drawContours(frame, [rightEyeHull], -1, (0, 255, 0), 1)
 		print(ear)
 		if ear < ear_thresh:
-			if (time.time()-last_ear_critical)>seconds_with_sub_ear:
+			if (time.time()-last_ear_uncritical)>seconds_with_sub_ear:
 				print("Alert")
+				buzz1()
+				red1()
 				cv2.putText(frame, "****************ALERT!****************", (10, 30),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 				cv2.putText(frame, "****************ALERT!****************", (10,325),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 		else:
-			last_ear_critical=time.time()
+    		buzz0()
+			red0()
+			last_ear_uncritical=time.time()
 cap.stop()
