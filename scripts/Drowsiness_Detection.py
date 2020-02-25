@@ -73,7 +73,7 @@ while True:
 				cv2.putText(frame, "****************ALERT!****************", (10,325),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 		else:
-    		buzz0()
-			red0()
-			last_ear_uncritical=time.time()
+                        buzz0()
+                        red0()
+                        last_ear_uncritical=time.time()
 cap.stop()
