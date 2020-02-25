@@ -2,7 +2,10 @@
 detect Drowsiness in car and truck Drivers Via computer vision and a raspberryPi
 
 ### The algorithm 
-![Ear algorithm ][https://miro.medium.com/max/1544/1*6Ix1R90EmXixWYd5MGSJdQ.png]
+
+[EAR algorithm]: https://miro.medium.com/max/1544/1*6Ix1R90EmXixWYd5MGSJdQ.png "EAR demo"
+
+
 This is based on landmark detection using DLIB library. and then getting the computing the EAR via this formula 
 and if the EAR has been lower than the ```ear_thresh``` for more than ```seconds_with_sub_ear``` it sounds the alarm 
 also alerts the user if it can't detect their eyes.
