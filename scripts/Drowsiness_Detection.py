@@ -7,7 +7,7 @@ import imutils
 import threading
 import numpy as np
 from imutils import face_utils
-from blink import  blue1,blue0,buzz1,buzz0,red1,red0
+from blink import  blue1,blue0,buzz1,buzz0,red1,red0,dbg
 
 def eye_aspect_ratio(eye):
 	A = np.linalg.norm(eye[1]-eye[5])
@@ -49,7 +49,6 @@ while True:
 		blue0()
 		buzz0()
 		last_eyes=time.time()
-              
 	for subject in subjects:
 		shape = predict(gray, subject)
 		shape = face_utils.shape_to_np(shape)#converting to NumPy Array
@@ -73,7 +72,14 @@ while True:
 				cv2.putText(frame, "****************ALERT!****************", (10,325),
 					cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 		else:
-    		buzz0()
+			buzz0()
 			red0()
 			last_ear_uncritical=time.time()
+	if dbg:
+		cv2.imshow("Frame", frame)
+		key = cv2.waitKey(1) & 0xFF
+		if key == ord("q"):
+			break
+if dbg:
+    cv2.destroyAllWindows()
 cap.stop()
