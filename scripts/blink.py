@@ -1,13 +1,18 @@
 #https://www.element14.com/community/thread/58117/l/raspberry-pi-3-gpio-not-working?displayFullThread=true
+try:
+    import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
+    GPIO.setwarnings(True) # Ignore warning for now
+    GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
+    GPIO.setup(38, GPIO.OUT, initial=GPIO.LOW) # Blue LED
+    GPIO.setup(36, GPIO.OUT, initial=GPIO.LOW) # RED LED
+    GPIO.setup(40, GPIO.OUT, initial=GPIO.LOW) # Buzzer LED
+    dbg=False
+except ImportError:
+    print("couldn't import RPi.GPIO")
+    print("running on DEBUG mode")
+    dbg=True
 
-import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
-from time import sleep # Import the sleep function from the time module
-
-GPIO.setwarnings(True) # Ignore warning for now
-GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
-GPIO.setup(38, GPIO.OUT, initial=GPIO.LOW) # Blue LED
-GPIO.setup(36, GPIO.OUT, initial=GPIO.LOW) # RED LED
-GPIO.setup(40, GPIO.OUT, initial=GPIO.LOW) # Buzzer LED
+from time import sleep
 
 def eyeAlert(s):
     blue1()
@@ -15,9 +20,16 @@ def eyeAlert(s):
     blue0()
 
 def blue1():
-    GPIO.output(38, GPIO.HIGH)
+    if not dbg:
+        GPIO.output(38, GPIO.HIGH)
+    else:
+        print("Blue on")
+
 def blue0():
-    GPIO.output(38, GPIO.LOW)
+    if not dbg:
+        GPIO.output(38, GPIO.LOW)
+    else:
+        print("Blue off")
 
 def DrownAlert(s):
     red1()
@@ -25,11 +37,16 @@ def DrownAlert(s):
     red0()
 
 def red1():
-    GPIO.output(36, GPIO.HIGH)
+    if not dbg:
+        GPIO.output(36, GPIO.HIGH)
+    else:
+        print("red one")
 
 def red0():
-    GPIO.output(36, GPIO.LOW)
-
+    if not dbg:
+        GPIO.output(36, GPIO.LOW)
+    else:
+        print("red zero")
     
 def Buzz(s):
     buzz1() 
@@ -37,10 +54,16 @@ def Buzz(s):
     buzz0()
 
 def buzz1():
-    GPIO.output(40,GPIO.HIGH)
+    if not dbg:
+        GPIO.output(40,GPIO.HIGH)
+    else:
+        print("Buzzer on")
 
 def buzz0():
-    GPIO.output(40,GPIO.LOW)
+    if not dbg:
+        GPIO.output(40,GPIO.LOW)
+    else:
+        print("Buzzer off")
 
 if __name__=="__main__":
     try:
